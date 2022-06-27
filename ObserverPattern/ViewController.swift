@@ -17,7 +17,16 @@ class ViewController: UIViewController {
 
 
 }
-
+//Dentro vamos a crear el subject o observable
 class ViewModel {
+    //Va a difundir la informacion
+    var title = PassthroughSubject<String, Error>()
+    
+    var titulo: String!
+    
+    
+    func updateTitle(title: String){
+        self.title.send(title)
+    }
     
 }
