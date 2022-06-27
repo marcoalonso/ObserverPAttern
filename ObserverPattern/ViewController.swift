@@ -48,8 +48,9 @@ class ViewController: UIViewController {
             
         }.store(in: &anyCancellable) //Voy a guardar la subscricion en la var anyCancellable
         
-        viewModel.$color.sink { color in
-            self.view.backgroundColor = color
+        // MARK: - Color
+        viewModel.$color.sink { [weak self] color in
+            self?.view.backgroundColor = color
         }.store(in: &anyCancellable)
     }
 
