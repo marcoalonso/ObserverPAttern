@@ -41,7 +41,7 @@ class ViewController: UIViewController {
     @objc func updateTitle(){
         count += 1
         if count > 10 {
-            anyCancellable.removeAll() //se cancela la subscripcion
+            anyCancellable.removeAll() //se cancela la subscripcion.
         }
         viewModel.updateTitle(title: "La vista aumento \(count) veces")
     }
