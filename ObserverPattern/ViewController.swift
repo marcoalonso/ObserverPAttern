@@ -16,10 +16,19 @@ class ViewController: UIViewController {
     var viewModel = ViewModel()
     //Cuando se crea una subscripcion se debe de almacenar en algun lugar
     var anyCancellable: [AnyCancellable] = []
+    var timer = Timer()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         subscriptions()
+        
+        //Me debe permitir llamar a updateTitle
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTitle), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateTitle(){
+        viewModel.updateTitle(title: "Marco Alonso")
     }
 
     //Crear una suscripcion
