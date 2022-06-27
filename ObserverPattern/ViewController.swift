@@ -1,11 +1,21 @@
 //
 //  ViewController.swift
 //  ObserverPattern
-//
+// https://www.youtube.com/watch?v=jFKuMb6kILU
 //  Created by marco rodriguez on 27/06/22.
 // Ejemplo de primer commit
 //Este patron reacciona a los cambios que envia el subjet o sujeto observado
 //Se puede anular la subscripcion
+
+/*
+ Subject-Observable
+    attach(observer)
+    detach(observer)
+    notifuy()
+ 
+ Subscriber-Observer
+    update()
+ */
 
 import UIKit
 import Combine //Este framework permite la programacion reactiva
@@ -30,19 +40,19 @@ class ViewController: UIViewController {
     
     @objc func updateTitle(){
         count += 1
-        if count > 5 {
+        if count > 10 {
             anyCancellable.removeAll() //se cancela la subscripcion
         }
-        viewModel.updateTitle(title: "Marco Alonso aumento \(count) veces")
+        viewModel.updateTitle(title: "La vista aumento \(count) veces")
     }
 
     //Crear una suscripcion
     func subscriptions(){
         //Se esta suscribiendo
         //Evitar retencion de memoria [weak self]
-        
+        //.sink permite reaccionar a los cambios 
         viewModel.title.sink { _ in } receiveValue: {[weak self] title in
-            //Reaccionar a los cambios
+            
             self?.titleLabel.text = title
             self?.titleLabel.textColor = .blue
             
@@ -65,7 +75,7 @@ class ViewModel {
     func updateTitle(title: String){
         self.title.send(title)
         
-        let colors: [UIColor] = [.black, .brown, .white, .orange, .red, .purple, .systemPink, .green]
+        let colors: [UIColor] = [.black, .brown, .white, .orange, .red, .purple, .systemPink, .green, .darkGray, .systemCyan]
         color = colors[Int.random(in: 0..<colors.count)]
     }
     
