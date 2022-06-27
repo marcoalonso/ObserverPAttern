@@ -4,6 +4,8 @@
 //
 //  Created by marco rodriguez on 27/06/22.
 // Ejemplo de primer commit
+//Este patron reacciona a los cambios que envia el subjet o sujeto observado
+
 
 import UIKit
 import Combine //Este framework permite la programacion reactiva
@@ -12,6 +14,8 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var titleLabel: UILabel!
     var viewModel = ViewModel()
+    //Cuando se crea una subscripcion se debe de almacenar en algun lugar
+    var anyCancellable: [AnyCancellable] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,11 +24,15 @@ class ViewController: UIViewController {
 
     //Crear una suscripcion
     func subscriptions(){
-        viewModel.title.sink { _ in
-            
-        } receiveValue: { title in
+        //Se esta suscribiendo
+        //Evitar retencion de memoria [weak self]
+        
+        viewModel.title.sink { _ in } receiveValue: {[weak self] title in
             //Reaccionar a los cambios
-        }
+            self?.titleLabel.text = title
+            self?.titleLabel.textColor = .blue
+            
+        }.store(in: &anyCancellable) //Voy a guardar la subscricion en la var anyCancellable
 
     }
 
