@@ -5,7 +5,7 @@
 //  Created by marco rodriguez on 27/06/22.
 // Ejemplo de primer commit
 //Este patron reacciona a los cambios que envia el subjet o sujeto observado
-
+//Se puede anular la subscripcion
 
 import UIKit
 import Combine //Este framework permite la programacion reactiva
@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     //Cuando se crea una subscripcion se debe de almacenar en algun lugar
     var anyCancellable: [AnyCancellable] = []
     var timer = Timer()
+    var count = 0
     
     
     override func viewDidLoad() {
@@ -28,7 +29,11 @@ class ViewController: UIViewController {
     }
     
     @objc func updateTitle(){
-        viewModel.updateTitle(title: "Marco Alonso")
+        count += 1
+        if count > 5 {
+            anyCancellable.removeAll() //se cancela la subscripcion
+        }
+        viewModel.updateTitle(title: "Marco Alonso aumento \(count) veces")
     }
 
     //Crear una suscripcion
@@ -42,7 +47,10 @@ class ViewController: UIViewController {
             self?.titleLabel.textColor = .blue
             
         }.store(in: &anyCancellable) //Voy a guardar la subscricion en la var anyCancellable
-
+        
+        viewModel.$color.sink { color in
+            self.view.backgroundColor = color
+        }.store(in: &anyCancellable)
     }
 
 }
@@ -50,12 +58,14 @@ class ViewController: UIViewController {
 class ViewModel {
     //Va a difundir la informacion
     var title = PassthroughSubject<String, Error>()
-    
-    var titulo: String!
+    @Published var color: UIColor = .blue
     
     
     func updateTitle(title: String){
         self.title.send(title)
+        
+        let colors: [UIColor] = [.black, .brown, .white, .orange, .red, .purple, .systemPink, .green]
+        color = colors[Int.random(in: 0..<colors.count)]
     }
     
 }
