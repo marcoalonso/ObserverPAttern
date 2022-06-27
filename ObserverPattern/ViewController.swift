@@ -47,7 +47,10 @@ class ViewController: UIViewController {
             self?.titleLabel.textColor = .blue
             
         }.store(in: &anyCancellable) //Voy a guardar la subscricion en la var anyCancellable
-
+        
+        viewModel.$color.sink { color in
+            self.view.backgroundColor = color
+        }.store(in: &anyCancellable)
     }
 
 }
@@ -55,12 +58,14 @@ class ViewController: UIViewController {
 class ViewModel {
     //Va a difundir la informacion
     var title = PassthroughSubject<String, Error>()
-    
-    var titulo: String!
+    @Published var color: UIColor = .blue
     
     
     func updateTitle(title: String){
         self.title.send(title)
+        
+        let colors: [UIColor] = [.black, .brown, .white, .orange, .red, .purple, .systemPink, .green]
+        color = colors[Int.random(in: 0..<colors.count)]
     }
     
 }
