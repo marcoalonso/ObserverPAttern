@@ -61,7 +61,7 @@ class ViewController: UIViewController {
         // MARK: - Color
         viewModel.$color.sink { [weak self] color in
             self?.view.backgroundColor = color
-        }.store(in: &anyCancellable)
+        }.store(in: &anyCancellable) //si no se guarda no se le va a notificar
     }
 
 }
